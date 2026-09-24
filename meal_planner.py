@@ -53,7 +53,7 @@ def generate_shopping_list():
     # Build dictionary of recipes by name for easy lookup
     recipe_dict = {r['name']: Recipe.from_dict(r) for r in recipes_data}
     
-    planned_recipe_names = [name for name in plan.values() if name]
+    planned_recipe_names = {name for name in plan.values() if name}
     if not planned_recipe_names:
         utils.print_error("Meal plan is empty. Please create a meal plan first.")
         return
@@ -66,8 +66,11 @@ def generate_shopping_list():
             print(f"[Warning] Recipe '{name}' from meal plan not found in database.")
 
     # Deduplicate and sort (case-insensitive deduplication)
-    unique_ingredients = list(set([ing.strip().capitalize() for ing in all_ingredients]))
-    unique_ingredients.sort()
+    unique_ingredients = sorted({
+        ing.strip().capitalize()
+        for ing in all_ingredients
+        if ing.strip()
+    })
 
     if not unique_ingredients:
         utils.print_error("No ingredients found for the planned meals.")

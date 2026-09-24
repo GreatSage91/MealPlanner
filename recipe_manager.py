@@ -1,6 +1,7 @@
 from models import Recipe
 import storage
 import utils
+import suggestion_engine
 
 def add_recipe():
     utils.clear_screen()
@@ -39,16 +40,10 @@ def search_recipes():
     recipes = storage.load_recipes()
     results = []
     for r_data in recipes:
-        r = Recipe.from_dict(r_data)
-        # Check name
-        if query in r.name.lower():
-            results.append(r)
-            continue
-        # Check ingredients
-        for ing in r.ingredients:
-            if query in ing.lower():
-                results.append(r)
-                break
+        recipe = Recipe.from_dict(r_data)
+        searchable_text = [recipe.name] + recipe.ingredients
+        if any(query in value.lower() for value in searchable_text):
+            results.append(recipe)
                 
     if not results:
         print("No matching recipes found.")
@@ -86,7 +81,6 @@ def view_full_recipe():
         utils.print_error("Please enter a valid number.")
 
 def suggest_recipes_from_ingredients():
-    import suggestion_engine
     utils.clear_screen()
     print("=== Suggest Recipes from Available Ingredients ===")
     
