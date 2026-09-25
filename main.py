@@ -1,7 +1,7 @@
+import sys
 import utils
 import recipe_manager
 import meal_planner
-import sys
 
 def display_menu():
     print("=== Recipe Manager & Meal Planner ===")
@@ -26,12 +26,10 @@ def main():
         '7': meal_planner.view_meal_plan,
         '8': meal_planner.generate_shopping_list,
     }
-
     while True:
         utils.clear_screen()
         display_menu()
         choice = utils.prompt_string("\nSelect an option (1-9): ")
-
         if choice == '9':
             print("Exiting program. Goodbye!")
             sys.exit(0)
@@ -40,7 +38,6 @@ def main():
             action()
         else:
             utils.print_error("Invalid option. Please try again.")
-
         input("\nPress Enter to continue...")
 
 if __name__ == "__main__":
